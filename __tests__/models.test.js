@@ -76,6 +76,14 @@ describe("GET /api/articles/:articles_id", () => {
       expect(body.msg).toBe('Not found')
     })
   })
+  it('400: returns a psql error message if an invalid article id is passed', () => {
+    return request(app)
+    .get('/api/articles/notnumber')
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid request')
+    })
+  })
   
 });
 
