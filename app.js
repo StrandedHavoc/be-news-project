@@ -1,6 +1,6 @@
 const express = require('express')
-const { getAllTopics, getAllEndpoints, getArticle } = require('./controllers/topics.controller')
-const { handlePsqlErrors, handleCustomErrors } = require('./errors/errors')
+const { getAllTopics, getAllEndpoints, getArticle, getAllArticles } = require('./controllers/topics.controller')
+const { handlePsqlErrors, handleCustomErrors, handleServerErrors} = require('./errors/errors')
 
 const app = express()
 
@@ -10,6 +10,8 @@ app.get('/api', getAllEndpoints)
 
 app.get('/api/articles/:article_id', getArticle)
 
+app.get('/api/articles', getAllArticles)
+
 app.all('*', (_, res) => {
   res.status(404).send({ msg: 'Not found'})
 })
@@ -17,6 +19,8 @@ app.all('*', (_, res) => {
 app.use(handlePsqlErrors)
 
 app.use(handleCustomErrors)
+
+app.use(handleServerErrors)
 
 
 module.exports = {app}

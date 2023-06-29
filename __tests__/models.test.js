@@ -84,6 +84,48 @@ describe("GET /api/articles/:articles_id", () => {
       expect(body.msg).toBe('Invalid request')
     })
   })
-  
 });
+
+describe.only('GET/api/articles', () => {
+  it('200: return an articles array sorted by date in descending order', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toBeSortedBy('created_at', {descending: true})
+    })
+  })
+  it('200: returns article objects with the correct properties', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toHaveLength(13)
+      articles.forEach(article => {
+        expect(article).toHaveProperty('author', expect.any(String))
+        expect(article).toHaveProperty('title', expect.any(String))
+        expect(article).toHaveProperty('article_id', expect.any(Number))
+        expect(article).toHaveProperty('topic', expect.any(String))
+        expect(article).toHaveProperty('created_at', expect.any(String))
+        expect(article).toHaveProperty('votes', expect.any(Number))
+        expect(article).toHaveProperty('article_img_url', expect.any(String))
+        expect(article).toHaveProperty('comment_count', expect.any(Number))
+      })
+    })
+  })
+  it('200: return articles with no properties named body', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toHaveLength(13)
+      articles.forEach(article => {
+        expect(article).not.toHaveProperty('body', expect.any(String))
+      })
+    })
+  })
+})
 
