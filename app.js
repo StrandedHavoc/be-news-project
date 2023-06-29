@@ -23,5 +23,5 @@ app.use(handleCustomErrors)
 app.use(handleServerErrors)
 
 
-module.exports = {app}
+module.exports = app
 

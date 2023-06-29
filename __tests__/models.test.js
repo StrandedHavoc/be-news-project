@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { app } = require("../app");
+const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
@@ -86,7 +86,7 @@ describe("GET /api/articles/:articles_id", () => {
   })
 });
 
-describe.only('GET/api/articles', () => {
+describe('GET/api/articles', () => {
   it('200: return an articles array sorted by date in descending order', () => {
     return request(app)
     .get("/api/articles")
