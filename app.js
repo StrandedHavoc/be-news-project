@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require("express")
 const { getAllTopics, getAllEndpoints, getArticle, getAllArticles } = require('./controllers/topics.controller')
 const { handlePsqlErrors, handleCustomErrors, handleServerErrors} = require('./errors/errors')
 

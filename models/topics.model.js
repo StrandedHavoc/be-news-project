@@ -24,3 +24,5 @@ exports.selectAllArticles = () => {
         return rows;
     })
 }
+
+

@@ -86,7 +86,7 @@ describe("GET /api/articles/:articles_id", () => {
   })
 });
 
-describe.only('GET/api/articles', () => {
+describe('GET/api/articles', () => {
   it('200: return an articles array sorted by date in descending order', () => {
     return request(app)
     .get("/api/articles")
@@ -129,3 +129,6 @@ describe.only('GET/api/articles', () => {
   })
 })
 
+describe('GET/api/articles/:article_id/comments', () => {
+  
+})
