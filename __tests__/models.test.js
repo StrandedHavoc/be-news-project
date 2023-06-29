@@ -130,5 +130,39 @@ describe('GET/api/articles', () => {
 })
 
 describe('GET/api/articles/:article_id/comments', () => {
-  
+  it('200: returns an array of comments for article id requested by user sorted by newest comment first', () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({body}) => {
+      const {comments} = body
+      expect(comments).toBeSortedBy('created_at', {descending: true})
+      expect(comments).toHaveLength(11)
+      
+      comments.forEach(comment => {
+        expect(comment).toHaveProperty('votes', expect.any(Number))
+        expect(comment).toHaveProperty('body', expect.any(String))
+        expect(comment).toHaveProperty('author', expect.any(String))
+        expect(comment).toHaveProperty('comment_id', expect.any(Number))
+        expect(comment).toHaveProperty('article_id', expect.any(Number))
+        expect(comment).toHaveProperty('created_at', expect.any(String))
+      })
+    })
+  })
+  it('404: returns a custom error if article_id does not exist', () => {
+    return request(app)
+    .get('/api/articles/30/comments')
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Not found')
+    })
+  })
+  it('400: returns a psql error message if an invalid article id is requested', () => {
+    return request(app)
+    .get('/api/articles/notnumber/comments')
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid request')
+    })
+  })
 })
