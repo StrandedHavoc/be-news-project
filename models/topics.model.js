@@ -24,3 +24,10 @@ exports.selectAllArticles = () => {
         return rows;
     })
 }
+
+exports.selectComments = (article_id) => {
+  const query = 'SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at desc;'
+  return db.query(query, [article_id]).then(({rows}) => {
+    return rows
+  })
+}
