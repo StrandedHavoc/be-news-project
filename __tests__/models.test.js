@@ -149,12 +149,12 @@ describe('GET/api/articles/:article_id/comments', () => {
       })
     })
   })
-  it('404: returns a custom error if article_id does not exist', () => {
+  it('200: returns an empty array if category exists but there are no comments in that article', () => {
     return request(app)
-    .get('/api/articles/30/comments')
-    .expect(404)
+    .get('/api/articles/2/comments')
+    .expect(200)
     .then(({body}) => {
-      expect(body.msg).toBe('Not found')
+      expect(body.comments).toHaveLength(0)
     })
   })
   it('400: returns a psql error message if an invalid article id is requested', () => {
@@ -163,6 +163,14 @@ describe('GET/api/articles/:article_id/comments', () => {
     .expect(400)
     .then(({body}) => {
       expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('404: returns a custom error if article_id does not exist', () => {
+    return request(app)
+    .get('/api/articles/30/comments')
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Article not found')
     })
   })
 })

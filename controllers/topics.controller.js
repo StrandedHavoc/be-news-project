@@ -1,4 +1,5 @@
 const { getAllTopics, selectArticleById, selectAllArticles, selectComments } = require('../models/topics.model')
+const {checkArticleExists} = require('../db/seeds/utils')
 const endpointsData = require('../endpoints.json')
 
 exports.getAllTopics = (req, res, next) => {
@@ -34,11 +35,18 @@ exports.getAllArticles = (req, res, next) => {
 
 exports.getComments = (req, res, next) => {
     const {article_id} = req.params
-    selectComments(article_id)
-    .then((comments) => {
+
+    const promises = [selectComments(article_id)]
+
+    if(article_id) {
+        promises.push(checkArticleExists(article_id))
+    }
+
+    Promise.all(promises)
+    .then((resolvedPromises) => {
+        console.log('inside resolved promises')
+        const comments = resolvedPromises[0]
         res.status(200).send({comments})
     })
-    .catch((err) => {
-        next(err)
-    })
+    .catch(next)
 }
