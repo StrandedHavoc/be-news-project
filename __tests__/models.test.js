@@ -174,3 +174,66 @@ describe('GET/api/articles/:article_id/comments', () => {
     })
   })
 })
+
+describe.only('POST/api/articles/:article_id/comments', () => {
+  it('201: returns a new comment based on article with matching article_id', () => {
+    const newComment = {
+      body: "Meh...waste of time",
+      username: "butter_bridge",
+    }
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(201)
+    .then(({body}) => {
+      const {comment} = body
+      expect(comment).toHaveProperty('author', expect.any(String))
+      expect(comment).toHaveProperty('body', expect.any(String))
+      expect(comment).toMatchObject({
+        comment_id: 19,
+        body: "Meh...waste of time",
+        votes: 0,
+        author: "butter_bridge",
+        article_id: 1,
+      })
+    })
+  })
+  it('400: returns a psql error message if an invalid article id is requested', () => {
+    const newComment = {
+      body: "Meh...waste of time",
+      username: "butter_bridge",
+    }
+    return request(app)
+    .post('/api/articles/notnumber/comments')
+    .send(newComment)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('404: returns a custom error if article_id is valid but does not exist', () => {
+    const newComment = {
+      body: "Meh...waste of time",
+      username: "butter_bridge",
+    }
+    return request(app)
+    .post('/api/articles/30/comments')
+    .send(newComment)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Article not found')
+    })
+  })
+  it('400: returns error message when user posts a comment with missing properties', () => {
+    const newComment = {
+      body: "butter_bridge",
+    }
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Bad Request')
+    })
+  })
+})
