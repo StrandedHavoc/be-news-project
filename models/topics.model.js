@@ -43,3 +43,13 @@ exports.insertComment = (author, body, article_id) => {
     return rows[0]
   })
 }
+
+exports.updateArticle = (vote, id) => {
+  if (!vote) return Promise.reject({status: 400, msg: 'Bad request'})
+
+  return db
+  .query(`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *`, [vote, id])
+  .then(({rows}) => {
+    return rows[0]
+  })
+}
