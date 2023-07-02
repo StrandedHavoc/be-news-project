@@ -32,10 +32,11 @@ exports.selectComments = (article_id) => {
   })
 }
 
-exports.insertComment = (author, body, article_id) => {
+exports.insertComment = (author, body, article_id) => {  
   if (!author || !body) {
     return Promise.reject({status: 400, msg: 'Bad Request'})
   }
+
   return db
   .query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *`, [author, body, article_id])
   .then(({rows}) => {

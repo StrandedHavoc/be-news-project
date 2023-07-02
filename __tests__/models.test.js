@@ -175,7 +175,7 @@ describe('GET/api/articles/:article_id/comments', () => {
   })
 })
 
-describe.only('POST/api/articles/:article_id/comments', () => {
+describe('POST/api/articles/:article_id/comments', () => {
   it('201: returns a new comment based on article with matching article_id', () => {
     const newComment = {
       body: "Meh...waste of time",
@@ -234,6 +234,21 @@ describe.only('POST/api/articles/:article_id/comments', () => {
     .expect(400)
     .then(({body}) => {
       expect(body.msg).toBe('Bad Request')
+    })
+  })
+  it('201: returns a new comment ignoring any extra properties user tries to change when posting', () => {
+    const newComment = {
+      body: "Meh...waste of time",
+      username: "butter_bridge",
+      created_at: 1,
+    }
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(201)
+    .then(({body}) => {
+      const {comment} = body
+      expect(comment.created_at).not.toBe(1)
     })
   })
 })
