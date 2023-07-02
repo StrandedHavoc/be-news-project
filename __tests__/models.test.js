@@ -116,7 +116,7 @@ describe('GET/api/articles', () => {
       })
     })
   })
-  it('200: return articles with no properties named body', () => {
+  it('200: should not return any articles with a body property', () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -315,6 +315,23 @@ describe('PATCH/api/articles/:article_id', () => {
     .expect(404)
     .then(({body}) => {
       expect(body.msg).toBe('Article not found')
+    })
+  })
+})
+
+describe('GET/api/users', () => {
+  it('200: return all users with the correct properties', () => {
+    return request(app)
+    .get('/api/users')
+    .expect(200)
+    .then(({body}) => {
+      const {users} = body
+      expect(users).toHaveLength(4)
+      users.forEach(user => {
+        expect(user).toHaveProperty('username', expect.any(String))
+        expect(user).toHaveProperty('name', expect.any(String))
+        expect(user).toHaveProperty('avatar_url', expect.any(String))
+      })
     })
   })
 })
