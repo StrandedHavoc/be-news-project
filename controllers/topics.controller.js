@@ -1,14 +1,14 @@
-const { getAllTopics, selectArticleById, selectAllArticles, selectComments, insertComment, updateArticle } = require('../models/topics.model')
+const { getAllTopics, selectArticleById, selectAllArticles, selectComments, insertComment, updateArticle, selectAllUsers } = require('../models/topics.model')
 const {checkArticleExists} = require('../db/seeds/utils')
 const endpointsData = require('../endpoints.json')
 
-exports.getAllTopics = (req, res, next) => {
+exports.getAllTopics = (_, res, next) => {
     return getAllTopics().then((topics) => {
         res.status(200).send({topics})
     })
 }
 
-exports.getAllEndpoints = (req, res) => {
+exports.getAllEndpoints = (_, res) => {
     res.status(200).send(endpointsData)
 }
 
@@ -23,7 +23,7 @@ exports.getArticle = (req, res, next) => {
     })
 }
 
-exports.getAllArticles = (req, res, next) => {
+exports.getAllArticles = (_, res, next) => {
     selectAllArticles()
     .then((articles) => {
         res.status(200).send({articles})
@@ -88,4 +88,11 @@ exports.patchArticle = (req, res, next) => {
         res.status(200).send({updatedArticle})
     })
     .catch(next)
+}
+
+exports.getAllUsers = (_, res) => {
+    selectAllUsers()
+    .then((users) => {
+        res.status(200).send({users})
+    })
 }
