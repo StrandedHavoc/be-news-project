@@ -1,4 +1,4 @@
-const { getAllTopics, selectArticleById, selectAllArticles, selectComments } = require('../models/topics.model')
+const { getAllTopics, selectArticleById, selectAllArticles, selectComments, insertComment } = require('../models/topics.model')
 const {checkArticleExists} = require('../db/seeds/utils')
 const endpointsData = require('../endpoints.json')
 
@@ -44,9 +44,28 @@ exports.getComments = (req, res, next) => {
 
     Promise.all(promises)
     .then((resolvedPromises) => {
-        console.log('inside resolved promises')
         const comments = resolvedPromises[0]
         res.status(200).send({comments})
     })
     .catch(next)
+}
+
+exports.postComment = (req, res, next) => {
+    const { article_id } = req.params
+    const { username, body } = req.body
+
+    const promises = [insertComment(username, body, article_id)]
+
+    if(article_id) {
+        promises.push(checkArticleExists(article_id))
+    }
+
+    Promise.all(promises)
+    .then((resolvedPromises) => {
+        const comment = resolvedPromises[0]
+        res.status(201).send({comment})
+    })
+    .catch((err) => {
+        next(err)
+    })
 }
