@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const endpointsData = require("../endpoints.json");
+const { updateArticle } = require("../models/topics.model");
 
 beforeEach(() => {
   return seed(data);
@@ -68,20 +69,20 @@ describe("GET /api/articles/:articles_id", () => {
         });
       });
   });
-  it('404: returns a custom error message if article id does not exist', () => {
-    return request(app)
-    .get('/api/articles/20')
-    .expect(404)
-    .then(({body}) => {
-      expect(body.msg).toBe('Not found')
-    })
-  })
   it('400: returns a psql error message if an invalid article id is passed', () => {
     return request(app)
     .get('/api/articles/notnumber')
     .expect(400)
     .then(({body}) => {
       expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('404: returns a custom error message if article id does not exist', () => {
+    return request(app)
+    .get('/api/articles/20')
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Not found')
     })
   })
 });
@@ -198,6 +199,21 @@ describe('POST/api/articles/:article_id/comments', () => {
       })
     })
   })
+  it('201: returns a new comment ignoring any extra properties user tries to change when posting', () => {
+    const newComment = {
+      body: "Meh...waste of time",
+      username: "butter_bridge",
+      created_at: 1,
+    }
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(201)
+    .then(({body}) => {
+      const {comment} = body
+      expect(comment.created_at).not.toBe(1)
+    })
+  })
   it('400: returns a psql error message if an invalid article id is requested', () => {
     const newComment = {
       body: "Meh...waste of time",
@@ -209,6 +225,18 @@ describe('POST/api/articles/:article_id/comments', () => {
     .expect(400)
     .then(({body}) => {
       expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('400: returns error message when user posts a comment with missing properties', () => {
+    const newComment = {
+      body: "butter_bridge",
+    }
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Bad Request')
     })
   })
   it('404: returns a custom error if article_id is valid but does not exist', () => {
@@ -224,31 +252,69 @@ describe('POST/api/articles/:article_id/comments', () => {
       expect(body.msg).toBe('Article not found')
     })
   })
-  it('400: returns error message when user posts a comment with missing properties', () => {
-    const newComment = {
-      body: "butter_bridge",
-    }
+})
+
+describe('PATCH/api/articles/:article_id', () => {
+  it('200: return updated vote property of an article based on article id', () => {
+    const newVote = {inc_votes: 1}
     return request(app)
-    .post('/api/articles/1/comments')
-    .send(newComment)
-    .expect(400)
+    .patch('/api/articles/1')
+    .send(newVote)
+    .expect(200)
     .then(({body}) => {
-      expect(body.msg).toBe('Bad Request')
+      const {updatedArticle} = body
+      expect(updatedArticle.votes).toBe(1)
     })
   })
-  it('201: returns a new comment ignoring any extra properties user tries to change when posting', () => {
-    const newComment = {
-      body: "Meh...waste of time",
-      username: "butter_bridge",
-      created_at: 1,
-    }
+  it('200: return updated vote property if minus votes are requested', () => {
+    const minusVote = {inc_votes: -2}
     return request(app)
-    .post('/api/articles/1/comments')
-    .send(newComment)
-    .expect(201)
+    .patch('/api/articles/1')
+    .send(minusVote)
+    .expect(200)
     .then(({body}) => {
-      const {comment} = body
-      expect(comment.created_at).not.toBe(1)
+      const {updatedArticle} = body
+      expect(updatedArticle.votes).toBe(-2)
+    })
+  })
+  it('400: returns a psql error message if an invalid article id is requested', () => {
+    const newVote = {inc_votes: 1}
+    return request(app)
+    .patch('/api/articles/notnumber')
+    .send(newVote)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('400: returns an error message if data input for updated property is invalid', () => {
+    const newVote = {inc_votes: 'twenty'}
+    return request(app)
+    .patch('/api/articles/2')
+    .send(newVote)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid request')
+    })
+  })
+  it('400: returns an error message if request is missing properties', () => {
+    const testPatch = {created_at: 2}
+    return request(app)
+    .patch('/api/articles/1')
+    .send(testPatch)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('Bad request')
+    })
+  })
+  it('404: returns an error message if article id is valid but does not exist', () => {
+    const newVote = {inc_votes: 1}
+    return request(app)
+    .patch('/api/articles/25')
+    .send(newVote)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Article not found')
     })
   })
 })
