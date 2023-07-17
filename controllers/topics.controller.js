@@ -1,4 +1,4 @@
-const { getAllTopics, selectArticleById, selectAllArticles, selectComments, insertComment, updateArticle, selectAllUsers } = require('../models/topics.model')
+const { getAllTopics, selectArticleById, selectAllArticles, selectComments, insertComment, updateArticle, selectAllUsers, removeComment } = require('../models/topics.model')
 const {checkArticleExists} = require('../db/seeds/utils')
 const endpointsData = require('../endpoints.json')
 
@@ -95,4 +95,22 @@ exports.getAllUsers = (_, res) => {
     .then((users) => {
         res.status(200).send({users})
     })
+}
+
+exports.deleteComment = (req, res, next) => {
+    const {article_id} = req.params
+
+    const promises = [removeComment(article_id)]
+
+    if (article_id) {
+        promises.push(checkArticleExists(article_id))
+    }
+
+    Promise.all(promises)
+    .then((resolvedPromises) => {
+        console.log(resolvedPromises, '<-----resolvedPromises')
+        const deletedComment = resolvedPromises[0]
+        res.status(204).send({deletedComment})
+    })
+    .catch(next)
 }

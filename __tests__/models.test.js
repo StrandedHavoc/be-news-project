@@ -4,7 +4,6 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const endpointsData = require("../endpoints.json");
-const { updateArticle } = require("../models/topics.model");
 
 beforeEach(() => {
   return seed(data);
@@ -332,6 +331,17 @@ describe('GET/api/users', () => {
         expect(user).toHaveProperty('name', expect.any(String))
         expect(user).toHaveProperty('avatar_url', expect.any(String))
       })
+    })
+  })
+})
+
+describe.only('DELETE/api/comments/:comment_id', () => {
+  it('204: returns no content by deleting comment determined by comment id', () => {
+    return request(app)
+    .delete('/api/comments/3')
+    .expect(204)
+    .then(({body}) => {
+    console.log(body,'<------body in test')
     })
   })
 })
