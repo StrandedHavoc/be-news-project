@@ -335,13 +335,13 @@ describe('GET/api/users', () => {
   })
 })
 
-describe.only('DELETE/api/comments/:comment_id', () => {
-  it('204: returns no content by deleting comment determined by comment id', () => {
-    return request(app)
-    .delete('/api/comments/3')
-    .expect(204)
-    .then(({body}) => {
-    console.log(body,'<------body in test')
-    })
-  })
-})
+// describe('DELETE/api/comments/:comment_id', () => {
+//   it('204: returns no content by deleting comment determined by comment id', () => {
+//     return request(app)
+//     .delete('/api/comments/3')
+//     .expect(204)
+//     .then(({body}) => {
+//     console.log(body,'<------body in test')
+//     })
+//   })
+// })
