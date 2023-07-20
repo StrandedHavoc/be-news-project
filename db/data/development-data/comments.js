@@ -720,13 +720,13 @@ module.exports = [
     article_id: 6,
     created_at: 1583993340000,
   },
-  {
-    body: "Nihil laborum qui quidem quibusdam aut deserunt laboriosam. Enim ipsa corporis. Nobis ipsa deleniti natus nulla qui ut vero sequi. Perferendis eveniet eligendi est itaque repellat. Illum hic nesciunt omnis veniam recusandae architecto et. Cumque qui mollitia ipsam impedit nemo.",
-    votes: 1,
-    author: "grumpy19",
-    article_id: 14,
-    created_at: 1601601120000,
-  },
+  // {
+  //   body: "Nihil laborum qui quidem quibusdam aut deserunt laboriosam. Enim ipsa corporis. Nobis ipsa deleniti natus nulla qui ut vero sequi. Perferendis eveniet eligendi est itaque repellat. Illum hic nesciunt omnis veniam recusandae architecto et. Cumque qui mollitia ipsam impedit nemo.",
+  //   votes: 1,
+  //   author: "grumpy19",
+  //   article_id: 14,
+  //   created_at: 1601601120000,
+  // },
   {
     body: "Ut facilis laboriosam minus architecto. Ratione ea ad et cupiditate nisi ut. Est ex facilis facilis. Corrupti ut quaerat et voluptatum corporis possimus et rem. Quisquam eos et qui illo esse earum fuga. Atque omnis ullam.",
     votes: 6,
@@ -825,13 +825,13 @@ module.exports = [
     article_id: 29,
     created_at: 1601086800000,
   },
-  {
-    body: "Rerum asperiores et aut illum iste. Sunt pariatur voluptate at quas nostrum.",
-    votes: 20,
-    author: "grumpy19",
-    article_id: 14,
-    created_at: 1579896660000,
-  },
+  // {
+  //   body: "Rerum asperiores et aut illum iste. Sunt pariatur voluptate at quas nostrum.",
+  //   votes: 20,
+  //   author: "grumpy19",
+  //   article_id: 14,
+  //   created_at: 1579896660000,
+  // },
   {
     body: "Praesentium asperiores omnis porro facilis dignissimos sint exercitationem fugit. Error voluptas soluta veniam dicta amet iste. Deleniti assumenda id exercitationem accusantium. Ut sed eum est.",
     votes: 18,
@@ -1532,13 +1532,13 @@ module.exports = [
     article_id: 16,
     created_at: 1605197820000,
   },
-  {
-    body: "Facilis molestias consequatur aperiam debitis ut. Qui pariatur sit saepe. Perferendis officiis sunt qui.",
-    votes: 10,
-    author: "cooljmessy",
-    article_id: 14,
-    created_at: 1591851900000,
-  },
+  // {
+  //   body: "Facilis molestias consequatur aperiam debitis ut. Qui pariatur sit saepe. Perferendis officiis sunt qui.",
+  //   votes: 10,
+  //   author: "cooljmessy",
+  //   article_id: 14,
+  //   created_at: 1591851900000,
+  // },
   {
     body: "In quos et. Voluptatem ut at voluptatem earum consequuntur. Aliquid et accusantium. Facere non asperiores magnam quia exercitationem atque dignissimos voluptate enim.",
     votes: 0,
